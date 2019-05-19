@@ -1,1 +1,1 @@
-obj-y += hexdump.o
+obj-y += hexdump/hexdump.o

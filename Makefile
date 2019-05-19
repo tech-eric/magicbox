@@ -48,5 +48,6 @@ help:
 
 clean:
 	rm -rf $(TARGET)
-	find ./ -name "*.o"|xargs rm
+	find ./widgets -name "*.o"|xargs rm
+	find ./core -name "*.o"|xargs rm
 
