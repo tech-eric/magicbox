@@ -5,6 +5,7 @@ obj-y :=
 build_dir := $(patsubst %build-in.o, %, $(obj))
 
 #加载编译目录下的Makefile
+include include/config/auto.conf
 include $(build_dir)Makefile
 
 #筛选出obj-y中的子目录
@@ -27,6 +28,13 @@ $(obj): $(src_sub) $(src)
 	@echo "Entering directory $(patsubst %/build-in.o, %, $@)"
 	@make -f $(PWD)/scripts/Makefile.build obj=$@
 	@echo "Entering directory $(patsubst %/build-in.o, %, $(build_dir))"
+
 %.o: %.c
 	@gcc $(INCLUDE) -o $@ -c $<
 	@echo "  cc $(notdir $@) <== $(notdir $<)"
+
+FORCE:
+
+PHONY += FORCE
+
+.PHONY: $(PHONY)

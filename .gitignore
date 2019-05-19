@@ -1,0 +1,5 @@
+*.o
+.config
+.config.old
+.tmp*
+magicbox
