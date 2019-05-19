@@ -1,0 +1,1 @@
+/usr/bin/cc   -rdynamic CMakeFiles/mconf.dir/mconf.c.o  -o mconf lxdialog/liblxdialog.a -lncurses -lform libzconf.a 

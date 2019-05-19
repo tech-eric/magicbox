@@ -1,0 +1,11 @@
+config hexdump
+    bool "hexdump"
+    default n
+
+config test1
+    bool "test1"
+    default n
+
+config test2
+    bool "test2"
+    default n

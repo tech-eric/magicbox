@@ -1,0 +1,6 @@
+mainmenu "Main menu"
+
+comment "This is a magic box with many usingful tools"
+
+source widgets/Kconfig
+

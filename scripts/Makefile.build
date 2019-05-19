@@ -1,0 +1,32 @@
+
+obj-y :=
+
+#提取目标编译目录
+build_dir := $(patsubst %build-in.o, %, $(obj))
+
+#加载编译目录下的Makefile
+include $(build_dir)Makefile
+
+#筛选出obj-y中的子目录
+build_subdir := $(filter %/,  $(obj-y))
+
+#子目录追加完整路径
+src_sub := $(patsubst %/, $(build_dir)%/build-in.o, $(build_subdir))
+
+#筛选出obj-y中的源文件
+src    := $(filter %.o, $(obj-y))
+
+#源文件追加完整路径
+src    := $(patsubst %.o, $(build_dir)%.o, $(src))
+
+$(obj): $(src_sub) $(src)
+	@$(LD) -r -o $@ $^
+	@echo "  ld $(notdir $(obj)) <== $(notdir $(src_sub) $(src))"
+
+%/build-in.o:
+	@echo "Entering directory $(patsubst %/build-in.o, %, $@)"
+	@make -f $(PWD)/scripts/Makefile.build obj=$@
+	@echo "Entering directory $(patsubst %/build-in.o, %, $(build_dir))"
+%.o: %.c
+	@gcc $(INCLUDE) -o $@ -c $<
+	@echo "  cc $(notdir $@) <== $(notdir $<)"

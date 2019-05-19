@@ -1,0 +1,8 @@
+/work/menuconfig/menuconfig/build/CMakeFiles/rebuild_cache.dir
+/work/menuconfig/menuconfig/build/CMakeFiles/edit_cache.dir
+/work/menuconfig/menuconfig/build/CMakeFiles/conf.dir
+/work/menuconfig/menuconfig/build/CMakeFiles/zconf.dir
+/work/menuconfig/menuconfig/build/CMakeFiles/mconf.dir
+/work/menuconfig/menuconfig/build/lxdialog/CMakeFiles/rebuild_cache.dir
+/work/menuconfig/menuconfig/build/lxdialog/CMakeFiles/lxdialog.dir
+/work/menuconfig/menuconfig/build/lxdialog/CMakeFiles/edit_cache.dir

@@ -1,0 +1,8 @@
+config TEXT_TOOL
+    bool "text tools"
+    default n
+
+
+config PICTURE_TOOL
+    bool "picture tools"
+    default n

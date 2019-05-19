@@ -1,0 +1,1 @@
+/usr/bin/cc   -rdynamic CMakeFiles/conf.dir/conf.c.o  -o conf -lncurses -lform libzconf.a 
