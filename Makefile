@@ -5,9 +5,9 @@ LD := ld
 
 
 TARGET=magicbox
-USER_CONFIG ?= .config
 PWD := $(shell pwd)
-INCLUDE := -I/work/magicbox/include/config
+USER_CONFIG ?= $(PWD)/.config
+INCLUDE := -I/work/magicbox/include/config -I/work/magicbox/include/generated
 
 export USER_CONFIG
 export PWD
@@ -28,6 +28,9 @@ $(TARGET): $(src)
 
 menuconfig:
 	scripts/mconf  Kconfig
+	@rm -rf include/generated/autoconf.h
+	scripts/conf --savedefconfig include/config/auto.conf Kconfig
+	scripts/conf --silentoldconfig include/generated/autoconf.h Kconfig
 
 savedefconfig:
 	scripts/conf --savedefconfig defconfig  Kconfig
@@ -44,5 +47,6 @@ help:
 	echo obj-$(config_text_tool)
 
 clean:
-	rm -rf $(TARGET) *.o
+	rm -rf $(TARGET)
+	find ./ -name "*.o"|xargs rm
 

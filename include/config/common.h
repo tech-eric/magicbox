@@ -8,4 +8,8 @@
 #define u32 unsigned int
 #define s32 signed int
 
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
 #endif

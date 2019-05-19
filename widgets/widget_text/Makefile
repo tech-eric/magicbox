@@ -1,1 +1,1 @@
-obj-y += string_cat.o
+obj-y += hexdump.o

@@ -1,23 +1,20 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include "common.h"
 #include "cmd.h"
+#include "autoconf.h"
+
+#ifdef CONFIG_TEXT_TOOL
+extern int hexdump(int argc, char* argv[]);
+#endif
 
 /* 命令列表*/
-cmdDef cmd_list[CMD_MAX_NUM] = {NULL};
-u16 cmd_num = 0;
-
-int cmd_register()
+cmdDef cmd_list[CMD_MAX_NUM] =
 {
 
-}
-
-int cmd_deregister()
-{
-
-
-}
+#ifdef CONFIG_TEXT_TOOL
+    {"./hexdump", hexdump},
+#endif
+    NULL,
+};
 
 int cmd_run(int argc, char *argv[])
 {
@@ -27,7 +24,6 @@ int cmd_run(int argc, char *argv[])
     {
         if(!strncmp(cmd_list[i].name, argv[0], strlen(cmd_list[i].name)))
         {
-            printf("ok");
             cmd_list[i].func(argc, argv);
             return 0;
         }
@@ -39,6 +35,7 @@ int cmd_run(int argc, char *argv[])
 
 int cmd_init(void)
 {
+
     return 0;
 }
 

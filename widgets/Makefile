@@ -1,3 +1,3 @@
 
-obj-y += widget_core.o
-obj-y += widget_picture/
+obj-$(CONFIG_TEXT_TOOL) += widget_text/
+obj-$(CONFIG_PICTURE_TOOL) += widget_picture/
