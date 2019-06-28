@@ -1,3 +1,3 @@
 
-obj-$(CONFIG_TEXT_TOOL) += widget_text/
-obj-$(CONFIG_PICTURE_TOOL) += widget_picture/
+obj-y := widget_text/
+obj-y += widget_picture/

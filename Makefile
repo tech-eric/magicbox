@@ -3,28 +3,32 @@ include include/config/auto.conf
 CC := gcc
 LD := ld
 
-
-TARGET=magicbox
-PWD := $(shell pwd)
-USER_CONFIG ?= $(PWD)/.config
-INCLUDE := -I/work/magicbox/include/config -I/work/magicbox/include/generated
+TARGET		:=magicbox
+ROOTPATH 	:= $(shell pwd)
+USER_CONFIG ?= $(ROOTPATH)/.config
+INCLUDE := -I$(ROOTPATH)/include/config -I$(ROOTPATH)/include/generated
 
 export USER_CONFIG
-export PWD
+export ROOTPATH
 export INCLUDE
 
-src := core/  widgets/
+SRCS := core/ widgets/
 
-src := $(patsubst %/, $(PWD)/%/build-in.o, $(src))
+.PHONY: all pre clean
 
-all:$(TARGET)
+#Virtual Final target
+all: pre $(TARGET)
+	@echo "$(TARGET) is Ready"
 
-$(TARGET): $(src)
-	$(CC) -o $@ $^
+#Recursive compile start
+pre:
+	@for d in `echo $(SRCS)`; do\
+		make -C $$d -f Makefile -f $(ROOTPATH)/scripts/Makefile.build objs=$$d all; \
+	done
 
-%/build-in.o:
-	@echo "Entering directory $(patsubst %/build-in.o, %, $@)"
-	@make --no-print-directory -f scripts/Makefile.build obj=$@
+#Generate final app
+$(TARGET): $(patsubst %/, %/build-in.o, $(SRCS))
+	gcc -o $@ $^
 
 menuconfig:
 	scripts/mconf  Kconfig
@@ -46,8 +50,9 @@ test:
 help:
 	echo obj-$(config_text_tool)
 
+#Clean all the compiling generations
 clean:
+	@for d in `echo $(SRCS)`; do\
+		make -C $$d -f Makefile -f $(ROOTPATH)/scripts/Makefile.build clean; \
+		done
 	rm -rf $(TARGET)
-	find ./widgets -name "*.o"|xargs rm
-	find ./core -name "*.o"|xargs rm
-

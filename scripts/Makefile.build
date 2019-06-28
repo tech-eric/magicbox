@@ -1,40 +1,32 @@
 
-obj-y :=
+OBJ=$(objs)
+SRCS:=$(filter %.o, $(obj-y))
+DIRS:=$(filter %/, $(obj-y))
 
-#提取目标编译目录
-build_dir := $(patsubst %build-in.o, %, $(obj))
+-include $(patsubst %.o, %.d, $(SRCS))
 
-#加载编译目录下的Makefile
-include include/config/auto.conf
-include $(build_dir)Makefile
+.PHONY: all pre clean
 
-#筛选出obj-y中的子目录
-build_subdir := $(filter %/,  $(obj-y))
+all: pre build-in.o
 
-#子目录追加完整路径
-src_sub := $(patsubst %/, $(build_dir)%/build-in.o, $(build_subdir))
+pre: $(patsubst %.o, %.d, $(SRCS))
+	@for i in `echo $(DIRS)`;do\
+		make -C $$i -f Makefile -f $(ROOTPATH)/scripts/Makefile.build objs=$$i all;\
+	done;
 
-#筛选出obj-y中的源文件
-src    := $(filter %.o, $(obj-y))
-
-#源文件追加完整路径
-src    := $(patsubst %.o, $(build_dir)%.o, $(src))
-
-$(obj): $(src_sub) $(src)
-	@$(LD) -r -o $@ $^
-	@echo "  ld $(notdir $(obj)) <== $(notdir $(src_sub) $(src))"
-
-%/build-in.o:
-	@echo "Entering directory $(patsubst %/build-in.o, %, $@)"
-	@make -f $(PWD)/scripts/Makefile.build obj=$@
-	@echo "Entering directory $(patsubst %/build-in.o, %, $(build_dir))"
+build-in.o: $(SRCS) $(patsubst %/, %/build-in.o, $(DIRS))
+	ld -r -o $@ $^
 
 %.o: %.c
-	@gcc $(INCLUDE) -o $@ -c $<
-	@echo "  cc $(notdir $@) <== $(notdir $<)"
+	gcc -c $< $(INCLUDE)
 
-FORCE:
+%.d: %.c
+	@gcc -E -MM $(INCLUDE)  $< > $@.$$
+	@sed 's,\(.*\)\.o[:]*,\1.o \1.d:,g' < $@.$$ > $@
+	@rm -rf $@.$$
 
-PHONY += FORCE
-
-.PHONY: $(PHONY)
+clean:
+	@for d in `echo $(DIRS)`; do\
+		make -C $$d -f Makefile -f $(ROOTPATH)/scripts/Makefile.build clean;\
+	done;
+	rm -rf *.o *.d
