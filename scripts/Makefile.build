@@ -1,4 +1,6 @@
 
+include $(ROOTPATH)/include/config/auto.conf
+include Makefile
 OBJ=$(objs)
 SRCS:=$(filter %.o, $(obj-y))
 DIRS:=$(filter %/, $(obj-y))
@@ -11,7 +13,7 @@ all: pre build-in.o
 
 pre: $(patsubst %.o, %.d, $(SRCS))
 	@for i in `echo $(DIRS)`;do\
-		make -C $$i -f Makefile -f $(ROOTPATH)/scripts/Makefile.build objs=$$i all;\
+		make -C $$i -f $(ROOTPATH)/scripts/Makefile.build objs=$$i all;\
 	done;
 
 build-in.o: $(SRCS) $(patsubst %/, %/build-in.o, $(DIRS))

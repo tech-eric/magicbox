@@ -6,7 +6,7 @@ LD := ld
 TARGET		:=magicbox
 ROOTPATH 	:= $(shell pwd)
 USER_CONFIG ?= $(ROOTPATH)/.config
-INCLUDE := -I$(ROOTPATH)/include/config -I$(ROOTPATH)/include/generated
+INCLUDE := -I$(ROOTPATH)/include/config -I$(ROOTPATH)/include/generated -I$(ROOTPATH)/include/
 
 export USER_CONFIG
 export ROOTPATH
@@ -33,8 +33,9 @@ $(TARGET): $(patsubst %/, %/build-in.o, $(SRCS))
 menuconfig:
 	scripts/mconf  Kconfig
 	@rm -rf include/generated/autoconf.h
-	scripts/conf --savedefconfig include/config/auto.conf Kconfig
+	cp .config include/config/auto.conf
 	scripts/conf --silentoldconfig include/generated/autoconf.h Kconfig
+	@rm tmp/ -rf
 
 savedefconfig:
 	scripts/conf --savedefconfig defconfig  Kconfig
